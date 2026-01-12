@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import './ProductDetail.css'
+import images1 from '../assets/images/bottom-water/image-1.png'
+import leftBg from '../assets/images/bottom-water/bg.png'
 
 const ProductDetail = () => {
   const [formData, setFormData] = useState({
@@ -78,6 +80,36 @@ const ProductDetail = () => {
 
   return (
     <div className="product-detail">
+      <div className='banner-container'>
+        <div className='banner-content'>
+        <div className='left'>
+          <h2 className='left_title'>底部水冷生产线</h2>
+          <div className='bottom_line'/>
+          <p className='description'>
+            底部水冷平台： 电芯入料、堆叠、焊接、检测、Pack预装，Pack打包下线。核心工艺：激光焊接、螺栓紧固，兼容CTP/CTC新型工艺，适配方形/软包模组、铁锂/三元体系，支撑高精度装配与全流程智能生产。
+          </p>
+        </div>
+        <div className='right'>
+          <div className='right_bg'>
+            <img src={leftBg}/>
+
+          </div>
+          <div className='right_title'>
+            关键技术
+          </div>
+
+          <div className='tech-list'>
+            <div className='tech-item'>
+              <div className='tech-item_image'>
+                <img src={images1} />
+              </div>
+              <div className='tech-item_text'>机器人搬运</div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="detail-hero">
         <div className="container">
