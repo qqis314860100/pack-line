@@ -136,7 +136,7 @@ const AutomationSolutions = () => {
             </button>
           </div>
 
-          <div className="products-grid">
+          <div className={`products-grid ${getCurrentProducts().length === 1 ? 'single-item' : ''}`}>
             {getCurrentProducts().map((product) => (
               <div key={product.id} className="product-card">
                 <div className="product-image">

@@ -208,8 +208,19 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 500px)); /* 限制最大宽度为 500px */
   gap: 30px;
+  justify-content: start; /* 左对齐，不拉伸 */
+}
+
+/* 当只有一个卡片时，居中显示 */
+.products-grid:has(> :only-child) {
+  justify-content: center;
+}
+
+/* 兼容方案：如果浏览器不支持 :has()，使用 JavaScript 类名 */
+.products-grid.single-item {
+  justify-content: center;
 }
 
 .product-card {
@@ -389,6 +400,12 @@
 
   .products-grid {
     grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+  
+  /* 移动端单个卡片时也居中 */
+  .products-grid.single-item {
+    justify-content: center;
   }
 
   .category-tabs {
