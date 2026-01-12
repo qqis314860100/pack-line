@@ -1,59 +1,85 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './ProductDetail.css'
-import images1 from '../assets/images/bottom-water/image-1.png'
-import leftBg from '../assets/images/bottom-water/bg.png'
+import HERO_IMAGE from '../assets/images/image.png'
+
+// 关键技术圆图使用同一张占位图
+const KEY_TECH_IMAGES = Array(6).fill(HERO_IMAGE)
+
+// 基于原始图片尺寸的坐标（例如：宽 1400px，高 600px）
+const IMAGE_BASE_WIDTH = 1400
+const IMAGE_BASE_HEIGHT = 600
 
 const ProductDetail = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: '',
   })
+  const [annotationMode, setAnnotationMode] = useState('point') // 'point' 或 'area'
+  const [previewImage, setPreviewImage] = useState(null)
 
   const features = [
     {
       icon: '🤖',
       title: '自动化程度高',
-      description: '采用大量智能机器人，使搬运、拧紧协同作业高度集成'
+      description: '采用大量智能机器人，使搬运、拧紧协同作业高度集成',
     },
     {
       icon: '🛡️',
       title: '高安全可靠',
-      description: '20年测试技术底蕴，测试精度高，安全可靠'
+      description: '20年测试技术底蕴，测试精度高，安全可靠',
     },
     {
       icon: '⚙️',
       title: '布局灵活',
-      description: '全AGV调度，不受场地、工艺路径变更限制'
+      description: '全AGV调度，不受场地、工艺路径变更限制',
     },
     {
       icon: '📊',
       title: '信息智能化',
-      description: '实现全过程信息智能化，提高生产线的运行效率和管理水平'
-    }
+      description: '实现全过程信息智能化，提高生产线的运行效率和管理水平',
+    },
   ]
 
   const coreDevices = [
     {
-      image: 'https://via.placeholder.com/300x200?text=模组自动入箱工站',
-      name: '模组自动入箱工站'
+      image: 'https://via.placeholder.com/300x200?text=%E6%A8%A1%E7%BB%84%E8%87%AA%E5%8A%A8%E5%85%A5%E7%AE%B1%E5%B7%A5%E7%AB%99',
+      name: '模组自动入箱工站',
     },
     {
-      image: 'https://via.placeholder.com/300x200?text=等离子清洗及涂胶工站',
-      name: '等离子清洗及涂胶工站'
+      image: 'https://via.placeholder.com/300x200?text=%E7%AD%89%E7%A6%BB%E5%AD%90%E6%B8%85%E6%B4%97%E5%8F%8A%E6%B6%82%E8%83%B6%E5%B7%A5%E7%AB%99',
+      name: '等离子清洗及涂胶工站',
     },
     {
-      image: 'https://via.placeholder.com/300x200?text=自动拧紧工站',
-      name: '自动拧紧工站'
-    }
+      image: 'https://via.placeholder.com/300x200?text=%E8%87%AA%E5%8A%A8%E6%8B%A7%E7%B4%A7%E5%B7%A5%E7%AB%99',
+      name: '自动拧紧工站',
+    },
+  ]
+
+  const keyTechnologies = [
+    '机器人搬运',
+    '自动焊接',
+    '等离子清洗',
+    '自动涂胶',
+    'EOL测试',
+    'DCR测试',
+  ]
+
+  const stats = [
+    { label: '产能', value: '15 JPH' },
+    { label: '故障率', value: '< 1.5%' },
+    { label: '良品率', value: '99.9%' },
+    { label: '设备综合效率', value: '95%' },
   ]
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }))
   }
 
@@ -65,7 +91,7 @@ const ProductDetail = () => {
       name: '',
       email: '',
       phone: '',
-      message: ''
+      message: '',
     })
   }
 
@@ -74,48 +100,215 @@ const ProductDetail = () => {
       name: '',
       email: '',
       phone: '',
-      message: ''
+      message: '',
     })
   }
 
+  const handleTechClick = (tech, img) => {
+    console.log('点击了技术:', tech)
+    setPreviewImage(img)
+  }
+
+  const closePreview = () => setPreviewImage(null)
+
+  // 点位标注数据（第一种方式）
+  const pointStations = [
+    {
+      id: 1,
+      name: '电芯堆叠工站',
+      desc: '完成电芯堆叠与预装配。',
+      x: 310, // 水平方向坐标
+      y: 360, // 垂直方向坐标
+    },
+    {
+      id: 2,
+      name: '激光焊接工站',
+      desc: '实现高精度极耳与汇流排激光焊接。',
+      x: 650,
+      y: 320,
+    },
+    {
+      id: 3,
+      name: 'EOL测试工站',
+      desc: '对下线电池包进行功能与安全测试。',
+      x: 1020,
+      y: 280,
+    },
+  ]
+
+  // 区域标注数据（第二种方式）- 使用矩形区域 (x, y, width, height)
+  const areaStations = [
+    {
+      id: 1,
+      name: '电芯堆叠工站',
+      desc: '完成电芯堆叠与预装配。',
+      x: 200, // 区域左上角 x 坐标
+      y: 300, // 区域左上角 y 坐标
+      width: 220, // 区域宽度
+      height: 120, // 区域高度
+    },
+    {
+      id: 2,
+      name: '激光焊接工站',
+      desc: '实现高精度极耳与汇流排激光焊接。',
+      x: 550,
+      y: 280,
+      width: 200,
+      height: 100,
+    },
+    {
+      id: 3,
+      name: 'EOL测试工站',
+      desc: '对下线电池包进行功能与安全测试。',
+      x: 920,
+      y: 240,
+      width: 180,
+      height: 90,
+    },
+  ]
+
+  const stations = annotationMode === 'point' ? pointStations : areaStations
+
   return (
     <div className="product-detail">
-      <div className='banner-container'>
-        <div className='banner-content'>
-        <div className='left'>
-          <h2 className='left_title'>底部水冷生产线</h2>
-          <div className='bottom_line'/>
-          <p className='description'>
-            底部水冷平台： 电芯入料、堆叠、焊接、检测、Pack预装，Pack打包下线。核心工艺：激光焊接、螺栓紧固，兼容CTP/CTC新型工艺，适配方形/软包模组、铁锂/三元体系，支撑高精度装配与全流程智能生产。
-          </p>
-        </div>
-        <div className='right'>
-          <div className='right_bg'>
-            <img src={leftBg}/>
-
-          </div>
-          <div className='right_title'>
-            关键技术
-          </div>
-
-          <div className='tech-list'>
-            <div className='tech-item'>
-              <div className='tech-item_image'>
-                <img src={images1} />
-              </div>
-              <div className='tech-item_text'>机器人搬运</div>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-
-      {/* Hero Section */}
-      <section className="detail-hero">
+      {/* 面包屑，支持返回首页 */}
+      <section className="detail-breadcrumb">
         <div className="container">
-          <h1>智能装备解决方案</h1>
+          <nav className="breadcrumb">
+            <span onClick={() => navigate('/')}>首页</span>
+            <span className="separator">{'>'}</span>
+            <span>产品中心</span>
+            <span className="separator">{'>'}</span>
+            <span>智能装备</span>
+            <span className="separator">{'>'}</span>
+            <span>PACK自动化生产线</span>
+          </nav>
         </div>
       </section>
+
+      {/* 顶部大图区域（参考 PACK 自动化生产线效果） */}
+      <section className="pack-hero">
+        <div className="container pack-hero-inner">
+          <div className="pack-hero-left">
+            <h1>PACK自动化生产线</h1>
+            <p className="pack-hero-desc">
+              PACK自动化生产线是将成品模组组装为电池包的自动化生产线，其关键技术包括：模组入箱体、自动化上料、电池测试自动对插、激光焊接、PACK包气密性、EOL测试、箱体密封测试、电池包测试下线等。
+            </p>
+
+            <div className="pack-stats-card">
+              {stats.map((item) => (
+                <div key={item.label} className="pack-stat-item">
+                  <span className="pack-stat-label">{item.label}</span>
+                  <span className="pack-stat-value">{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div
+            className="pack-hero-right"
+            style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+            aria-label="PACK自动化生产线效果图占位"
+          >
+            {/* 标注方式切换按钮 */}
+            <div className="annotation-mode-switch">
+              <button
+                className={`mode-btn ${annotationMode === 'point' ? 'active' : ''}`}
+                onClick={() => setAnnotationMode('point')}
+              >
+                点位标注
+              </button>
+              <button
+                className={`mode-btn ${annotationMode === 'area' ? 'active' : ''}`}
+                onClick={() => setAnnotationMode('area')}
+              >
+                区域标注
+              </button>
+            </div>
+
+            {/* 点位标注模式 */}
+            {annotationMode === 'point' &&
+              pointStations.map((station) => (
+                <div
+                  key={station.id}
+                  className="station-marker station-point"
+                  style={{
+                    top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`,
+                    left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`,
+                  }}
+                >
+                  <div className="station-pulse"></div>
+                  <div className="station-dot"></div>
+                  <div className="station-tooltip">
+                    <div className="station-name">{station.name}</div>
+                    <div className="station-desc">{station.desc}</div>
+                  </div>
+                </div>
+              ))}
+
+            {/* 区域标注模式 */}
+            {annotationMode === 'area' &&
+              areaStations.map((station) => (
+                <div
+                  key={station.id}
+                  className="station-marker station-area"
+                  style={{
+                    top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`,
+                    left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`,
+                    width: `${(station.width / IMAGE_BASE_WIDTH) * 100}%`,
+                    height: `${(station.height / IMAGE_BASE_HEIGHT) * 100}%`,
+                  }}
+                >
+                  <div className="station-area-border"></div>
+                  <div className="station-tooltip station-area-tooltip">
+                    <div className="station-name">{station.name}</div>
+                    <div className="station-desc">{station.desc}</div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* 关键技术图标区域，位于整条产线图片下方 */}
+        <div className="container pack-tech-inner">
+          <button className="pack-keytech-button">关键技术</button>
+          <div className="pack-keytech-list glass-panel">
+            {keyTechnologies.map((tech, index) => (
+              <div
+                key={tech}
+                className="pack-keytech-item"
+                onClick={() => handleTechClick(tech, KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length])}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleTechClick(tech, KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length])
+                  }
+                }}
+              >
+                <div className="pack-keytech-image">
+                  <img src={KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length]} alt={tech} />
+                  <div className="pack-keytech-overlay"></div>
+                </div>
+                <div className="pack-keytech-text">{tech}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 图片预览弹层 */}
+      {previewImage && (
+        <div className="preview-overlay" onClick={closePreview}>
+          <div className="preview-dialog" onClick={(e) => e.stopPropagation()}>
+            <img src={previewImage} alt="预览" />
+            <button className="preview-close" onClick={closePreview} aria-label="关闭预览">
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Features Section */}
       <section className="features-section">

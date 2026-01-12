@@ -1,9 +1,41 @@
 .header {
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(26, 115, 232, 0.15);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(26, 115, 232, 0.05) inset;
   position: sticky;
   top: 0;
   z-index: 1000;
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(26, 115, 232, 0.3),
+    rgba(34, 211, 238, 0.3),
+    rgba(26, 115, 232, 0.3),
+    transparent
+  );
+  animation: header-glow 3s ease-in-out infinite;
+}
+
+@keyframes header-glow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .header-container {
@@ -26,14 +58,55 @@
 .logo-icon {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+  background: linear-gradient(135deg, #1a73e8 0%, #22d3ee 50%, #1a73e8 100%);
+  background-size: 200% 200%;
   color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   font-size: 20px;
+  box-shadow: 
+    0 4px 12px rgba(26, 115, 232, 0.3),
+    0 0 20px rgba(26, 115, 232, 0.2);
+  animation: logo-shimmer 3s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: logo-sweep 2s ease-in-out infinite;
+}
+
+@keyframes logo-shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes logo-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .logo-text {

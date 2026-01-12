@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './AutomationSolutions.css'
 
 const AutomationSolutions = () => {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('自动化产线')
 
   const automationProducts = [
@@ -101,7 +103,7 @@ const AutomationSolutions = () => {
       <section className="breadcrumb-section">
         <div className="container">
           <nav className="breadcrumb">
-            <span>首页</span>
+            <span onClick={() => navigate('/')}>首页</span>
             <span className="separator">></span>
             <span>产品中心</span>
             <span className="separator">></span>
@@ -143,7 +145,12 @@ const AutomationSolutions = () => {
                 <div className="product-content">
                   <h3>{product.title}</h3>
                   <p>{product.description}</p>
-                  <button className="explore-btn">探索更多</button>
+                  <button
+                    className="explore-btn"
+                    onClick={() => navigate('/product-info2/19')}
+                  >
+                    探索更多
+                  </button>
                 </div>
               </div>
             ))}
