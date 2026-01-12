@@ -742,9 +742,11 @@
 
 .pack-hero-image-full .pack-hero-right {
   width: 100%;
-  min-height: 500px;
-  background-size: cover;
+  aspect-ratio: 1400 / 600; /* 保持图片原始宽高比 */
+  min-height: 400px;
+  background-size: contain; /* 保持图片完整显示，不裁剪 */
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .pack-hero-content-below {
@@ -766,12 +768,14 @@
   }
 
   .pack-hero-image-full .pack-hero-right {
-    min-height: 400px;
+    /* aspect-ratio 会自动处理高度，保持比例 */
+    min-height: 0; /* 移除 min-height，让 aspect-ratio 生效 */
   }
 }
 
 @media (max-width: 768px) {
   .pack-hero-image-full .pack-hero-right {
-    min-height: 300px;
+    /* aspect-ratio 会自动处理高度，保持比例 */
+    min-height: 0; /* 移除 min-height，让 aspect-ratio 生效 */
   }
 }
