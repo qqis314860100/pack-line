@@ -19,7 +19,6 @@ const ProductDetail = () => {
     message: '',
   })
   const [annotationMode, setAnnotationMode] = useState('point') // 'point' 或 'area'
-  const [layoutMode, setLayoutMode] = useState('layout1') // 布局方案：layout1, layout2, layout3, layout4, layout5
   const [previewImage, setPreviewImage] = useState(null)
 
   const features = [
@@ -187,35 +186,77 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {/* 布局方案切换器 */}
-      <section className="layout-selector-section">
-        <div className="container">
-          <div className="layout-selector">
-            <span className="layout-label">布局方案：</span>
-            <div className="layout-options">
-              {['layout1', 'layout2', 'layout3', 'layout4', 'layout5'].map((layout) => (
+      {/* 顶部大图区域（参考 PACK 自动化生产线效果） */}
+      <section className="pack-hero">
+        <div className="container pack-hero-inner pack-hero-layout1">
+          {/* 图片在上 */}
+          <div className="pack-hero-image-full">
+            <div
+              className="pack-hero-right"
+              style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+              aria-label="PACK自动化生产线效果图占位"
+            >
+              {/* 标注方式切换按钮 */}
+              <div className="annotation-mode-switch">
                 <button
-                  key={layout}
-                  className={`layout-option ${layoutMode === layout ? 'active' : ''}`}
-                  onClick={() => setLayoutMode(layout)}
+                  className={`mode-btn ${annotationMode === 'point' ? 'active' : ''}`}
+                  onClick={() => setAnnotationMode('point')}
                 >
-                  {layout === 'layout1' && '方案一：左右分栏'}
-                  {layout === 'layout2' && '方案二：上下布局'}
-                  {layout === 'layout3' && '方案三：环绕式'}
-                  {layout === 'layout4' && '方案四：悬浮式'}
-                  {layout === 'layout5' && '方案五：时间轴'}
+                  点位标注
                 </button>
-              ))}
+                <button
+                  className={`mode-btn ${annotationMode === 'area' ? 'active' : ''}`}
+                  onClick={() => setAnnotationMode('area')}
+                >
+                  区域标注
+                </button>
+              </div>
+
+              {/* 点位标注模式 */}
+              {annotationMode === 'point' &&
+                pointStations.map((station) => (
+                  <div
+                    key={station.id}
+                    className="station-marker station-point"
+                    style={{
+                      top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`,
+                      left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`,
+                    }}
+                  >
+                    <div className="station-pulse"></div>
+                    <div className="station-dot"></div>
+                    <div className="station-tooltip">
+                      <div className="station-name">{station.name}</div>
+                      <div className="station-desc">{station.desc}</div>
+                    </div>
+                  </div>
+                ))}
+
+              {/* 区域标注模式 */}
+              {annotationMode === 'area' &&
+                areaStations.map((station) => (
+                  <div
+                    key={station.id}
+                    className="station-marker station-area"
+                    style={{
+                      top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`,
+                      left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`,
+                      width: `${(station.width / IMAGE_BASE_WIDTH) * 100}%`,
+                      height: `${(station.height / IMAGE_BASE_HEIGHT) * 100}%`,
+                    }}
+                  >
+                    <div className="station-area-border"></div>
+                    <div className="station-tooltip station-area-tooltip">
+                      <div className="station-name">{station.name}</div>
+                      <div className="station-desc">{station.desc}</div>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* 顶部大图区域（参考 PACK 自动化生产线效果） */}
-      <section className={`pack-hero pack-hero-${layoutMode}`}>
-        {/* 方案一：左右分栏（默认） */}
-        {layoutMode === 'layout1' && (
-          <div className="container pack-hero-inner pack-hero-layout1">
+          {/* 内容在下 */}
+          <div className="pack-hero-content-below">
             <div className="pack-hero-left">
               <h1>PACK自动化生产线</h1>
               <p className="pack-hero-desc">
@@ -232,71 +273,8 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div
-              className="pack-hero-right"
-              style={{ backgroundImage: `url(${HERO_IMAGE})` }}
-              aria-label="PACK自动化生产线效果图占位"
-            >
-            {/* 标注方式切换按钮 */}
-            <div className="annotation-mode-switch">
-              <button
-                className={`mode-btn ${annotationMode === 'point' ? 'active' : ''}`}
-                onClick={() => setAnnotationMode('point')}
-              >
-                点位标注
-              </button>
-              <button
-                className={`mode-btn ${annotationMode === 'area' ? 'active' : ''}`}
-                onClick={() => setAnnotationMode('area')}
-              >
-                区域标注
-              </button>
-            </div>
-
-            {/* 点位标注模式 */}
-            {annotationMode === 'point' &&
-              pointStations.map((station) => (
-                <div
-                  key={station.id}
-                  className="station-marker station-point"
-                  style={{
-                    top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`,
-                    left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`,
-                  }}
-                >
-                  <div className="station-pulse"></div>
-                  <div className="station-dot"></div>
-                  <div className="station-tooltip">
-                    <div className="station-name">{station.name}</div>
-                    <div className="station-desc">{station.desc}</div>
-                  </div>
-                </div>
-              ))}
-
-            {/* 区域标注模式 */}
-            {annotationMode === 'area' &&
-              areaStations.map((station) => (
-                <div
-                  key={station.id}
-                  className="station-marker station-area"
-                  style={{
-                    top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`,
-                    left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`,
-                    width: `${(station.width / IMAGE_BASE_WIDTH) * 100}%`,
-                    height: `${(station.height / IMAGE_BASE_HEIGHT) * 100}%`,
-                  }}
-                >
-                  <div className="station-area-border"></div>
-                  <div className="station-tooltip station-area-tooltip">
-                    <div className="station-name">{station.name}</div>
-                    <div className="station-desc">{station.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
             {/* 关键技术图标区域 */}
-            <div className="container pack-tech-inner">
+            <div className="pack-tech-inner">
               <button className="pack-keytech-button">关键技术</button>
               <div className="pack-keytech-list glass-panel">
                 {keyTechnologies.map((tech, index) => (
@@ -323,191 +301,7 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
-        )}
-
-        {/* 方案二：上下布局 - 图片在上，内容在下 */}
-        {layoutMode === 'layout2' && (
-          <div className="container pack-hero-inner pack-hero-layout2">
-            <div className="pack-hero-image-full">
-              <div className="pack-hero-right" style={{ backgroundImage: `url(${HERO_IMAGE})` }}>
-                <div className="annotation-mode-switch">
-                  <button className={`mode-btn ${annotationMode === 'point' ? 'active' : ''}`} onClick={() => setAnnotationMode('point')}>点位标注</button>
-                  <button className={`mode-btn ${annotationMode === 'area' ? 'active' : ''}`} onClick={() => setAnnotationMode('area')}>区域标注</button>
-                </div>
-                {annotationMode === 'point' && pointStations.map((station) => (
-                  <div key={station.id} className="station-marker station-point" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%` }}>
-                    <div className="station-pulse"></div><div className="station-dot"></div>
-                    <div className="station-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-                {annotationMode === 'area' && areaStations.map((station) => (
-                  <div key={station.id} className="station-marker station-area" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`, width: `${(station.width / IMAGE_BASE_WIDTH) * 100}%`, height: `${(station.height / IMAGE_BASE_HEIGHT) * 100}%` }}>
-                    <div className="station-area-border"></div>
-                    <div className="station-tooltip station-area-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="pack-hero-content-below">
-              <div className="pack-hero-left">
-                <h1>PACK自动化生产线</h1>
-                <p className="pack-hero-desc">PACK自动化生产线是将成品模组组装为电池包的自动化生产线，其关键技术包括：模组入箱体、自动化上料、电池测试自动对插、激光焊接、PACK包气密性、EOL测试、箱体密封测试、电池包测试下线等。</p>
-                <div className="pack-stats-card">
-                  {stats.map((item) => (<div key={item.label} className="pack-stat-item"><span className="pack-stat-label">{item.label}</span><span className="pack-stat-value">{item.value}</span></div>))}
-                </div>
-              </div>
-              <div className="pack-tech-inner">
-                <button className="pack-keytech-button">关键技术</button>
-                <div className="pack-keytech-list glass-panel">
-                  {keyTechnologies.map((tech, index) => (
-                    <div key={tech} className="pack-keytech-item" onClick={() => handleTechClick(tech, KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length])}>
-                      <div className="pack-keytech-image"><img src={KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length]} alt={tech} /><div className="pack-keytech-overlay"></div></div>
-                      <div className="pack-keytech-text">{tech}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 方案三：环绕式 - 图片在中间，内容环绕 */}
-        {layoutMode === 'layout3' && (
-          <div className="container pack-hero-inner pack-hero-layout3">
-            <div className="pack-hero-left pack-hero-left-top">
-              <h1>PACK自动化生产线</h1>
-              <p className="pack-hero-desc">PACK自动化生产线是将成品模组组装为电池包的自动化生产线，其关键技术包括：模组入箱体、自动化上料、电池测试自动对插、激光焊接、PACK包气密性、EOL测试、箱体密封测试、电池包测试下线等。</p>
-            </div>
-            <div className="pack-hero-image-center">
-              <div className="pack-hero-right" style={{ backgroundImage: `url(${HERO_IMAGE})` }}>
-                <div className="annotation-mode-switch">
-                  <button className={`mode-btn ${annotationMode === 'point' ? 'active' : ''}`} onClick={() => setAnnotationMode('point')}>点位标注</button>
-                  <button className={`mode-btn ${annotationMode === 'area' ? 'active' : ''}`} onClick={() => setAnnotationMode('area')}>区域标注</button>
-                </div>
-                {annotationMode === 'point' && pointStations.map((station) => (
-                  <div key={station.id} className="station-marker station-point" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%` }}>
-                    <div className="station-pulse"></div><div className="station-dot"></div>
-                    <div className="station-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-                {annotationMode === 'area' && areaStations.map((station) => (
-                  <div key={station.id} className="station-marker station-area" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`, width: `${(station.width / IMAGE_BASE_WIDTH) * 100}%`, height: `${(station.height / IMAGE_BASE_HEIGHT) * 100}%` }}>
-                    <div className="station-area-border"></div>
-                    <div className="station-tooltip station-area-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="pack-hero-right-content">
-              <div className="pack-stats-card">
-                {stats.map((item) => (<div key={item.label} className="pack-stat-item"><span className="pack-stat-label">{item.label}</span><span className="pack-stat-value">{item.value}</span></div>))}
-              </div>
-              <div className="pack-tech-inner">
-                <button className="pack-keytech-button">关键技术</button>
-                <div className="pack-keytech-list glass-panel">
-                  {keyTechnologies.map((tech, index) => (
-                    <div key={tech} className="pack-keytech-item" onClick={() => handleTechClick(tech, KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length])}>
-                      <div className="pack-keytech-image"><img src={KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length]} alt={tech} /><div className="pack-keytech-overlay"></div></div>
-                      <div className="pack-keytech-text">{tech}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 方案四：悬浮式 - 内容悬浮在图片上 */}
-        {layoutMode === 'layout4' && (
-          <div className="container pack-hero-inner pack-hero-layout4">
-            <div className="pack-hero-image-bg">
-              <div className="pack-hero-right" style={{ backgroundImage: `url(${HERO_IMAGE})` }}>
-                <div className="annotation-mode-switch">
-                  <button className={`mode-btn ${annotationMode === 'point' ? 'active' : ''}`} onClick={() => setAnnotationMode('point')}>点位标注</button>
-                  <button className={`mode-btn ${annotationMode === 'area' ? 'active' : ''}`} onClick={() => setAnnotationMode('area')}>区域标注</button>
-                </div>
-                {annotationMode === 'point' && pointStations.map((station) => (
-                  <div key={station.id} className="station-marker station-point" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%` }}>
-                    <div className="station-pulse"></div><div className="station-dot"></div>
-                    <div className="station-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-                {annotationMode === 'area' && areaStations.map((station) => (
-                  <div key={station.id} className="station-marker station-area" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`, width: `${(station.width / IMAGE_BASE_WIDTH) * 100}%`, height: `${(station.height / IMAGE_BASE_HEIGHT) * 100}%` }}>
-                    <div className="station-area-border"></div>
-                    <div className="station-tooltip station-area-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="pack-hero-overlay-content">
-              <div className="pack-hero-left-overlay">
-                <h1>PACK自动化生产线</h1>
-                <p className="pack-hero-desc">PACK自动化生产线是将成品模组组装为电池包的自动化生产线，其关键技术包括：模组入箱体、自动化上料、电池测试自动对插、激光焊接、PACK包气密性、EOL测试、箱体密封测试、电池包测试下线等。</p>
-                <div className="pack-stats-card">
-                  {stats.map((item) => (<div key={item.label} className="pack-stat-item"><span className="pack-stat-label">{item.label}</span><span className="pack-stat-value">{item.value}</span></div>))}
-                </div>
-              </div>
-              <div className="pack-tech-inner-overlay">
-                <button className="pack-keytech-button">关键技术</button>
-                <div className="pack-keytech-list glass-panel">
-                  {keyTechnologies.map((tech, index) => (
-                    <div key={tech} className="pack-keytech-item" onClick={() => handleTechClick(tech, KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length])}>
-                      <div className="pack-keytech-image"><img src={KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length]} alt={tech} /><div className="pack-keytech-overlay"></div></div>
-                      <div className="pack-keytech-text">{tech}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 方案五：时间轴式 - 横向流程展示 */}
-        {layoutMode === 'layout5' && (
-          <div className="container pack-hero-inner pack-hero-layout5">
-            <div className="pack-hero-image-timeline">
-              <div className="pack-hero-right" style={{ backgroundImage: `url(${HERO_IMAGE})` }}>
-                <div className="annotation-mode-switch">
-                  <button className={`mode-btn ${annotationMode === 'point' ? 'active' : ''}`} onClick={() => setAnnotationMode('point')}>点位标注</button>
-                  <button className={`mode-btn ${annotationMode === 'area' ? 'active' : ''}`} onClick={() => setAnnotationMode('area')}>区域标注</button>
-                </div>
-                {annotationMode === 'point' && pointStations.map((station) => (
-                  <div key={station.id} className="station-marker station-point" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%` }}>
-                    <div className="station-pulse"></div><div className="station-dot"></div>
-                    <div className="station-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-                {annotationMode === 'area' && areaStations.map((station) => (
-                  <div key={station.id} className="station-marker station-area" style={{ top: `${(station.y / IMAGE_BASE_HEIGHT) * 100}%`, left: `${(station.x / IMAGE_BASE_WIDTH) * 100}%`, width: `${(station.width / IMAGE_BASE_WIDTH) * 100}%`, height: `${(station.height / IMAGE_BASE_HEIGHT) * 100}%` }}>
-                    <div className="station-area-border"></div>
-                    <div className="station-tooltip station-area-tooltip"><div className="station-name">{station.name}</div><div className="station-desc">{station.desc}</div></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="pack-hero-timeline-content">
-              <div className="pack-hero-left">
-                <h1>PACK自动化生产线</h1>
-                <p className="pack-hero-desc">PACK自动化生产线是将成品模组组装为电池包的自动化生产线，其关键技术包括：模组入箱体、自动化上料、电池测试自动对插、激光焊接、PACK包气密性、EOL测试、箱体密封测试、电池包测试下线等。</p>
-                <div className="pack-stats-card">
-                  {stats.map((item) => (<div key={item.label} className="pack-stat-item"><span className="pack-stat-label">{item.label}</span><span className="pack-stat-value">{item.value}</span></div>))}
-                </div>
-              </div>
-              <div className="pack-tech-inner">
-                <button className="pack-keytech-button">关键技术</button>
-                <div className="pack-keytech-list glass-panel">
-                  {keyTechnologies.map((tech, index) => (
-                    <div key={tech} className="pack-keytech-item" onClick={() => handleTechClick(tech, KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length])}>
-                      <div className="pack-keytech-image"><img src={KEY_TECH_IMAGES[index % KEY_TECH_IMAGES.length]} alt={tech} /><div className="pack-keytech-overlay"></div></div>
-                      <div className="pack-keytech-text">{tech}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        </div>
       </section>
 
       {/* 图片预览弹层 */}

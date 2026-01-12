@@ -729,71 +729,8 @@
   }
 }
 
-/* ========== 布局方案选择器 ========== */
-.layout-selector-section {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(26, 115, 232, 0.1);
-  position: sticky;
-  top: 70px;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.layout-selector {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.layout-label {
-  font-weight: 600;
-  color: #333;
-  font-size: 14px;
-}
-
-.layout-options {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.layout-option {
-  padding: 8px 16px;
-  border: 1px solid rgba(26, 115, 232, 0.2);
-  background: #fff;
-  color: #666;
-  border-radius: 6px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.layout-option:hover {
-  border-color: #1a73e8;
-  color: #1a73e8;
-  background: #f0f7ff;
-}
-
-.layout-option.active {
-  background: linear-gradient(135deg, #1a73e8 0%, #22d3ee 100%);
-  color: #fff;
-  border-color: #1a73e8;
-  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
-}
-
-/* ========== 方案一：左右分栏（默认） ========== */
+/* ========== 上下布局 ========== */
 .pack-hero-layout1 {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-/* ========== 方案二：上下布局 ========== */
-.pack-hero-layout2 {
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -807,6 +744,7 @@
   width: 100%;
   min-height: 500px;
   background-size: cover;
+  background-position: center;
 }
 
 .pack-hero-content-below {
@@ -816,289 +754,24 @@
   align-items: start;
 }
 
-/* ========== 方案三：环绕式 ========== */
-.pack-hero-layout3 {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 40px;
-  align-items: start;
-  padding-top: 20px;
-}
-
-.pack-hero-left-top {
-  padding-right: 0;
-  flex: none;
-}
-
-.pack-hero-left-top h1 {
-  font-size: 32px;
-  margin-bottom: 16px;
-}
-
-.pack-hero-left-top .pack-hero-desc {
-  font-size: 15px;
-  line-height: 1.7;
-}
-
-.pack-hero-image-center {
-  order: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.pack-hero-image-center .pack-hero-right {
-  width: 100%;
-  min-height: 450px;
-  background-size: contain;
-  background-position: center;
-}
-
-.pack-hero-right-content {
-  order: 3;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  flex: none;
-}
-
-.pack-hero-right-content .pack-stats-card {
-  max-width: 100%;
-  margin-bottom: 0;
-}
-
-.pack-hero-right-content .pack-tech-inner {
+.pack-hero-content-below .pack-tech-inner {
   margin-top: 0;
-}
-
-/* ========== 方案四：悬浮式 ========== */
-.pack-hero-layout4 {
-  position: relative;
-  min-height: 700px;
-  padding: 0;
-}
-
-.pack-hero-layout4 .container {
-  position: relative;
-  height: 100%;
-  min-height: 700px;
-}
-
-.pack-hero-image-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.pack-hero-image-bg .pack-hero-right {
-  width: 100%;
-  height: 100%;
-  min-height: 700px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 0;
-}
-
-.pack-hero-overlay-content {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  padding: 50px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  margin: 60px auto;
-  max-width: 1200px;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-}
-
-.pack-hero-left-overlay {
-  padding-right: 20px;
-  flex: none;
-}
-
-.pack-hero-left-overlay h1 {
-  font-size: 36px;
-  margin-bottom: 20px;
-}
-
-.pack-hero-left-overlay .pack-hero-desc {
-  font-size: 15px;
-  margin-bottom: 24px;
-}
-
-.pack-hero-left-overlay .pack-stats-card {
-  max-width: 100%;
-  margin-bottom: 0;
-}
-
-.pack-tech-inner-overlay {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: flex-start;
-}
-
-.pack-tech-inner-overlay .pack-keytech-list {
-  width: 100%;
-}
-
-/* ========== 方案五：时间轴式 ========== */
-.pack-hero-layout5 {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  padding-top: 20px;
-}
-
-.pack-hero-image-timeline {
-  width: 100%;
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.pack-hero-image-timeline .pack-hero-right {
-  width: 100%;
-  min-height: 450px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
-
-.pack-hero-timeline-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 50px;
-  align-items: start;
-}
-
-.pack-hero-timeline-content .pack-hero-left {
-  padding-right: 30px;
-  flex: none;
-}
-
-.pack-hero-timeline-content .pack-hero-left h1 {
-  font-size: 36px;
-  margin-bottom: 20px;
-}
-
-.pack-hero-timeline-content .pack-hero-left .pack-hero-desc {
-  font-size: 15px;
-  margin-bottom: 24px;
-}
-
-.pack-hero-timeline-content .pack-stats-card {
-  max-width: 100%;
-  margin-bottom: 0;
-}
-
-.pack-hero-timeline-content .pack-tech-inner {
-  margin-top: 0;
-  align-items: flex-start;
 }
 
 /* 响应式适配 */
 @media (max-width: 1024px) {
-  .pack-hero-content-below,
-  .pack-hero-overlay-content,
-  .pack-hero-timeline-content {
+  .pack-hero-content-below {
     grid-template-columns: 1fr;
     gap: 30px;
   }
 
-  .pack-hero-layout3 {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .pack-hero-image-center {
-    order: 1;
-  }
-
-  .pack-hero-image-center .pack-hero-right {
-    min-height: 350px;
-  }
-
-  .pack-hero-right-content {
-    order: 2;
-  }
-
-  .pack-hero-left-top {
-    order: 0;
-  }
-
-  .pack-hero-overlay-content {
-    margin: 30px 20px;
-    padding: 30px 24px;
-  }
-
-  .pack-hero-layout4 {
-    min-height: auto;
-  }
-
-  .pack-hero-image-bg .pack-hero-right {
-    min-height: 500px;
-  }
-
-  .pack-hero-timeline-content {
-    gap: 30px;
-  }
-
-  .pack-hero-image-timeline .pack-hero-right {
-    min-height: 350px;
-  }
-
-  .layout-selector {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .layout-options {
-    width: 100%;
-  }
-
-  .layout-option {
-    flex: 1;
-    min-width: 120px;
-    font-size: 12px;
-    padding: 6px 12px;
+  .pack-hero-image-full .pack-hero-right {
+    min-height: 400px;
   }
 }
 
 @media (max-width: 768px) {
-  .pack-hero-layout3,
-  .pack-hero-layout5 {
-    gap: 24px;
-  }
-
-  .pack-hero-left-top h1,
-  .pack-hero-left-overlay h1,
-  .pack-hero-timeline-content .pack-hero-left h1 {
-    font-size: 28px;
-  }
-
-  .pack-hero-overlay-content {
-    margin: 20px 16px;
-    padding: 24px 20px;
-  }
-
-  .pack-hero-image-center .pack-hero-right,
-  .pack-hero-image-timeline .pack-hero-right {
-    min-height: 280px;
-  }
-
-  .pack-hero-image-bg .pack-hero-right {
-    min-height: 400px;
+  .pack-hero-image-full .pack-hero-right {
+    min-height: 300px;
   }
 }
